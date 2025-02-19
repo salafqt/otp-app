@@ -13,6 +13,7 @@ const OTPInput = ({ length = 6, onSubmit }) => {
 
     if (value && index < length - 1) {
       inputRefs.current[index + 1].focus();
+      inputRefs.current[index + 1].select();
     }
   };
 
@@ -23,7 +24,16 @@ const OTPInput = ({ length = 6, onSubmit }) => {
       setOtp(newOtp);
       if (index > 0) {
         inputRefs.current[index - 1].focus();
+        inputRefs.current[index - 1].select();
       }
+    } else if (e.key === "ArrowRight" && index < length - 1) {
+      e.preventDefault();
+      inputRefs.current[index + 1].focus();
+      inputRefs.current[index + 1].select();
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      e.preventDefault();
+      inputRefs.current[index - 1].focus();
+      inputRefs.current[index - 1].select();
     }
   };
 
@@ -44,9 +54,16 @@ const OTPInput = ({ length = 6, onSubmit }) => {
       }
     });
     inputRefs.current[Math.min(pasteData.length, length - 1)].focus();
+    inputRefs.current[Math.min(pasteData.length, length - 1)].select();
   };
 
   const handleFocus = (index) => {
+    inputRefs.current[index].focus();
+    inputRefs.current[index].select();
+  };
+
+  const handleClick = (index) => {
+    inputRefs.current[index].focus();
     inputRefs.current[index].select();
   };
 
@@ -72,6 +89,7 @@ const OTPInput = ({ length = 6, onSubmit }) => {
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={handlePaste}
               onFocus={() => handleFocus(index)}
+              onClick={() => handleClick(index)}
               ref={(el) => (inputRefs.current[index] = el)}
             />
           ))}
